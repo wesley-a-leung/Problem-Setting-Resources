@@ -1,7 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
-template<class C>constexpr int sz(const C&c){return int(c.size());}
-using ll=long long;using ld=long double;constexpr const char nl='\n',sp=' ';
+template <class C> constexpr int sz(const C &c) { return int(c.size()); }
+constexpr const char nl = '\n', sp = ' '; using uint = unsigned int;
+using ll = long long; using ull = unsigned long long; using ld = long double;
+#if __SIZEOF_INT128__
+  using i128 = __int128_t; using ui128 = __uint128_t;
+#endif
 
 namespace StdIO {
   int init() {
