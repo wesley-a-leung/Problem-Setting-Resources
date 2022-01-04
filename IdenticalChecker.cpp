@@ -100,7 +100,7 @@ public:
   std::string readLine(std::regex rgx = std::regex(".+")) {
     std::string ret = "";
     while (peekChar() != '\n') ret.push_back(getChar());
-    assert(std::regex_match(ret, rgx));
+    require(std::regex_match(ret, rgx));
     return ret;
   }
 
