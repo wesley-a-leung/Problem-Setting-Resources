@@ -6,4 +6,4 @@ correct data
 
 - Validator in C++ and Java including whitespace
 - StdIO Template in C++
-- C++ Generator, Checker, Interactor
+- C++ Standard Checker, Identical Checker, Interactor
