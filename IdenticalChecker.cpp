@@ -119,6 +119,6 @@ public:
 
 int main(int argc, char* argv[]) {
   assert(argc == 4);
-  IdenticalReader input(argv[1], 3), actualOutput(argv[2], 1), expectedOutput(argv[3], 3);
+  IdenticalReader judgeInput(argv[1], 3), userOutput(argv[2], 1), judgeOutput(argv[3], 3);
   return 0;
 }
