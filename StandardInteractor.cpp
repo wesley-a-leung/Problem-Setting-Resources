@@ -112,6 +112,6 @@ public:
 
 int main(int argc, char* argv[]) {
   assert(argc == 3);
-  StandardReader judgeInput(argv[1], 3), judgeOutput(argv[2], 3), userInput(std::cin, 1);
+  StandardReader judgeInput(argv[1], 3), judgeOutput(argv[2], 3), userOutput(std::cin, 1);
   return 0;
 }
