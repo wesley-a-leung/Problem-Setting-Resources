@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-using namespace std;
 
 namespace StdIO {
   int init() {
@@ -53,7 +52,7 @@ namespace StdIO {
 
   void readEOF() {
     char c;
-    assert(!(cin >> c));
+    assert(!(std::cin >> c));
   }
 }
 

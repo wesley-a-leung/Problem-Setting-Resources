@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-using namespace std;
 
 namespace Validator {
   std::regex nonWhitespaceToken("\\S+"), nonWhitespaceChar("\\S"), anyLine(".+");
