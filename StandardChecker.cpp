@@ -80,9 +80,15 @@ public:
     return ret;
   }
 
-  std::string readString(std::regex rgx = std::regex("\\S+")) {
+  std::string readString(std::regex rgx) {
     std::string ret;
     require(lineStream >> ret && std::regex_match(ret, rgx));
+    return ret;
+  }
+
+  std::string readString() {
+    std::string ret;
+    require(bool(lineStream >> ret));
     return ret;
   }
 
@@ -92,9 +98,15 @@ public:
     return ret;
   }
 
-  std::string readLine(std::regex rgx = std::regex(".+")) {
+  std::string readLine(std::regex rgx) {
     std::string ret;
     require(std::getline(lineStream, ret) && std::regex_match(ret, rgx));
+    return ret;
+  }
+
+  std::string readLine() {
+    std::string ret;
+    require(bool(std::getline(lineStream, ret)));
     return ret;
   }
 

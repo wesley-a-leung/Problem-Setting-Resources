@@ -84,10 +84,16 @@ public:
     return ret;
   }
 
-  std::string readString(std::regex rgx = std::regex("\\S+")) {
+  std::string readString(std::regex rgx) {
     std::string ret = "";
     while (!isspace(peekChar())) ret.push_back(getChar());
     require(std::regex_match(ret, rgx));
+    return ret;
+  }
+
+  std::string readString() {
+    std::string ret = "";
+    while (!isspace(peekChar())) ret.push_back(getChar());
     return ret;
   }
 
@@ -97,10 +103,16 @@ public:
     return ret;
   }
 
-  std::string readLine(std::regex rgx = std::regex(".+")) {
+  std::string readLine(std::regex rgx) {
     std::string ret = "";
     while (peekChar() != '\n') ret.push_back(getChar());
     require(std::regex_match(ret, rgx));
+    return ret;
+  }
+
+  std::string readLine() {
+    std::string ret = "";
+    while (peekChar() != '\n') ret.push_back(getChar());
     return ret;
   }
 
