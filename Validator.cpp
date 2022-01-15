@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 
 namespace Validator {
-  std::regex nonWhitespaceToken("\\S+"), nonWhitespaceChar("\\S"), anyLine(".+");
+  std::regex nonWhitespaceChar("\\S");
   bool _hasLast = false;
   char _last;
 
