@@ -33,10 +33,16 @@ namespace Validator {
     return ret;
   }
 
-  std::string readString(const std::regex &rgx = nonWhitespaceToken) {
+  std::string readString(const std::regex &rgx) {
     std::string ret = "";
     while (!isspace(_peekChar())) ret.push_back(_getChar());
     assert(std::regex_match(ret, rgx));
+    return ret;
+  }
+
+  std::string readString() {
+    std::string ret = "";
+    while (!isspace(_peekChar())) ret.push_back(_getChar());
     return ret;
   }
 
@@ -46,10 +52,16 @@ namespace Validator {
     return ret;
   }
 
-  std::string readLine(const std::regex &rgx = anyLine) {
+  std::string readLine(const std::regex &rgx) {
     std::string ret = "";
     while (_peekChar() != '\n') ret.push_back(_getChar());
     assert(std::regex_match(ret, rgx));
+    return ret;
+  }
+
+  std::string readLine() {
+    std::string ret = "";
+    while (_peekChar() != '\n') ret.push_back(_getChar());
     return ret;
   }
 
