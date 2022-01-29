@@ -17,19 +17,6 @@ private:
   std::stringstream lineStream;
   bool hitEOF;
 
-  void require(const bool expr) const {
-    if (!expr) {
-      if (exitCode == 3) assert(false);
-      else {
-        if (!errorMessage.empty()) {
-          std::cerr << errorMessage << std::endl;
-          std::cout << errorMessage << std::endl;
-        }
-        exit(exitCode);
-      }
-    }
-  }
-
   void getNextLine() {
     lineStream = std::stringstream();
     std::stringstream ss;
@@ -50,6 +37,19 @@ private:
   }
 
 public:
+  void require(const bool expr) const {
+    if (!expr) {
+      if (exitCode == 3) assert(false);
+      else {
+        if (!errorMessage.empty()) {
+          std::cerr << errorMessage << std::endl;
+          std::cout << errorMessage << std::endl;
+        }
+        exit(exitCode);
+      }
+    }
+  }
+  
   StandardReader(std::istream &stream, const int exitCode, const std::string &errorMessage = "")
       : stream(stream), exitCode(exitCode), errorMessage(errorMessage), hitEOF(false) {
     getNextLine();

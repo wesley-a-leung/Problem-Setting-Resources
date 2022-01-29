@@ -18,19 +18,6 @@ private:
   bool hasLast;
   char last;
 
-  void require(const bool expr) const {
-    if (!expr) {
-      if (exitCode == 3) assert(false);
-      else {
-        if (!errorMessage.empty()) {
-          std::cerr << errorMessage << std::endl;
-          std::cout << errorMessage << std::endl;
-        }
-        exit(exitCode);
-      }
-    }
-  }
-
   char peekChar() {
     if (!hasLast) stream.get(last); 
     hasLast = true;
@@ -44,6 +31,19 @@ private:
   }
 
 public:
+  void require(const bool expr) const {
+    if (!expr) {
+      if (exitCode == 3) assert(false);
+      else {
+        if (!errorMessage.empty()) {
+          std::cerr << errorMessage << std::endl;
+          std::cout << errorMessage << std::endl;
+        }
+        exit(exitCode);
+      }
+    }
+  }
+  
   IdenticalReader(std::istream &stream, const int exitCode, const std::string &errorMessage = "")
       : stream(stream), exitCode(exitCode), errorMessage(errorMessage), hasLast(false) {}
   
