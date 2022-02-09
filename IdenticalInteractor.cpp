@@ -66,6 +66,8 @@ public:
       ret = std::stoll(token);
     } catch (std::invalid_argument &) {
       require(false);
+    } catch (std::out_of_range &) {
+      require(false);
     }
     require(minValid <= ret && ret <= maxValid);
     return ret;
@@ -78,6 +80,8 @@ public:
     try {
       ret = std::stold(token);
     } catch (std::invalid_argument &) {
+      require(false);
+    } catch (std::out_of_range &) {
       require(false);
     }
     require(minValid <= ret && ret <= maxValid);
