@@ -101,10 +101,14 @@ public:
     return ret;
   }
 
-  char readChar(std::regex rgx = std::regex("\\S")) {
+  char readChar(std::regex rgx) {
     char ret = getChar();
     require(std::regex_match(std::string(1, ret), rgx));
     return ret;
+  }
+
+  char readChar() {
+    return getChar();
   }
 
   std::string readLine(std::regex rgx) {

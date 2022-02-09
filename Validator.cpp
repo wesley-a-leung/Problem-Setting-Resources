@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 
 namespace Validator {
-  std::regex nonWhitespaceChar("\\S");
   bool _hasLast = false;
   char _last;
 
@@ -46,10 +45,14 @@ namespace Validator {
     return ret;
   }
 
-  char readChar(const std::regex &rgx = nonWhitespaceChar) {
+  char readChar(const std::regex &rgx) {
     char ret = _getChar();
     assert(std::regex_match(std::string(1, ret), rgx));
     return ret;
+  }
+
+  char readChar() {
+    return _getChar();
   }
 
   std::string readLine(const std::regex &rgx) {
