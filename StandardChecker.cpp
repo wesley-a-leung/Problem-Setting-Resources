@@ -44,6 +44,7 @@ public:
       else {
         if (!errorMessage.empty()) {
           std::cerr << errorMessage << std::endl;
+          std::cout << errorMessage << std::endl;
         }
         exit(exitCode);
       }
