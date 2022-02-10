@@ -23,7 +23,7 @@ private:
     std::stringstream ss;
     std::string line, token;
     bool hasToken = false;
-    while (!hasToken) {
+    while (!hitEOF && !hasToken) {
       if (!std::getline(stream, line)) {
         hitEOF = true;
         break;
@@ -123,7 +123,9 @@ public:
 
   void readEOF() {
     char c;
-    require(hitEOF && !(stream >> c));
+    require(!(lineStream >> c));
+    getNextLine();
+    require(hitEOF);
   }
 };
 
