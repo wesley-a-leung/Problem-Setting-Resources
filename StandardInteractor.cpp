@@ -15,9 +15,10 @@ private:
   int exitCode;
   std::string errorMessage;
   std::stringstream lineStream;
-  bool hitEOF;
+  bool emptyBuffer, hitEOF;
 
   void getNextLine() {
+    emptyBuffer = false;
     lineStream = std::stringstream();
     std::stringstream ss;
     std::string line, token;
@@ -50,14 +51,10 @@ public:
   }
 
   StandardReader(std::istream &stream, const int exitCode, const std::string &errorMessage = "")
-      : stream(stream), exitCode(exitCode), errorMessage(errorMessage), hitEOF(false) {
-    getNextLine();
-  }
+      : stream(stream), exitCode(exitCode), errorMessage(errorMessage), emptyBuffer(true), hitEOF(false) {}
   
   StandardReader(std::string fileName, const int exitCode, const std::string &errorMessage = "")
-      : streamPtr(std::make_unique<std::ifstream>(fileName)), stream(*streamPtr), exitCode(exitCode), errorMessage(errorMessage), hitEOF(false) {
-    getNextLine();
-  }
+      : streamPtr(std::make_unique<std::ifstream>(fileName)), stream(*streamPtr), exitCode(exitCode), errorMessage(errorMessage), emptyBuffer(true), hitEOF(false) {}
 
   void setExitCode(int exitCode) {
     this->exitCode = exitCode;
@@ -68,42 +65,49 @@ public:
   }
 
   long long readInt(long long minValid = std::numeric_limits<long long>::min(), long long maxValid = std::numeric_limits<long long>::max()) {
+    if (emptyBuffer) getNextLine();
     long long ret;
     require(lineStream >> ret && minValid <= ret && ret <= maxValid);
     return ret;
   }
 
   long double readFloat(long double minValid = std::numeric_limits<long double>::lowest(), long double maxValid = std::numeric_limits<long double>::max()) {
+    if (emptyBuffer) getNextLine();
     long double ret;
     require(lineStream >> ret && minValid <= ret && ret <= maxValid);
     return ret;
   }
 
   std::string readString(std::regex rgx) {
+    if (emptyBuffer) getNextLine();
     std::string ret;
     require(lineStream >> ret && std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readString() {
+    if (emptyBuffer) getNextLine();
     std::string ret;
     require(bool(lineStream >> ret));
     return ret;
   }
 
   char readChar(std::regex rgx = std::regex("\\S")) {
+    if (emptyBuffer) getNextLine();
     char ret;
     require(lineStream >> ret && std::regex_match(std::string(1, ret), rgx));
     return ret;
   }
 
   std::string readLine(std::regex rgx) {
+    if (emptyBuffer) getNextLine();
     std::string ret;
     require(std::getline(lineStream, ret) && std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readLine() {
+    if (emptyBuffer) getNextLine();
     std::string ret;
     require(bool(std::getline(lineStream, ret)));
     return ret;
@@ -112,7 +116,8 @@ public:
   void readNewLine() {
     char c;
     require(!(lineStream >> c));
-    getNextLine();
+    lineStream = std::stringstream();
+    emptyBuffer = true;
   }
 
   void readEOF() {
