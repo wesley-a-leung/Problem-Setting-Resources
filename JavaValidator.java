@@ -113,6 +113,7 @@ public class JavaValidator {
   public static void main(String[] args) throws Exception {
     in.readEOF();
     in.close();
+    out.flush();
     out.close();
   }
 }
