@@ -100,6 +100,13 @@ public:
     return ret;
   }
 
+  char readChar() {
+    if (emptyBuffer) getNextLine();
+    char ret;
+    require((lineStream >> ret));
+    return ret;
+  }
+
   std::string readLine(std::regex rgx) {
     if (emptyBuffer) getNextLine();
     std::string ret;
