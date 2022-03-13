@@ -93,7 +93,7 @@ public:
     return ret;
   }
 
-  char readChar(std::regex rgx = std::regex("\\S")) {
+  char readChar(std::regex rgx) {
     if (emptyBuffer) getNextLine();
     char ret;
     require(lineStream >> ret && std::regex_match(std::string(1, ret), rgx));
@@ -103,7 +103,7 @@ public:
   char readChar() {
     if (emptyBuffer) getNextLine();
     char ret;
-    require((lineStream >> ret));
+    require(bool(lineStream >> ret));
     return ret;
   }
 
