@@ -43,6 +43,8 @@ namespace Input {
     }
   };
 
+  const bool IDENTICAL = true, STANDARD = false;
+
   template <class ErrorHandler, const bool IDENTICAL_WHITESPACE> struct Reader : public ErrorHandler {
   private:
     std::unique_ptr<std::ifstream> streamPtr;
@@ -187,7 +189,7 @@ namespace Input {
     }
   };
 
-  using Validator = Reader<ValidatorErrorHandler, true>;
-  using StandardReader = Reader<CheckerErrorHandler, false>;
-  using IdenticalReader = Reader<CheckerErrorHandler, true>;
+  using Validator = Reader<ValidatorErrorHandler, IDENTICAL>;
+  using StandardReader = Reader<CheckerErrorHandler, STANDARD>;
+  using IdenticalReader = Reader<CheckerErrorHandler, IDENTICAL>;
 }
