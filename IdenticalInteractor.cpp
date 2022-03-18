@@ -19,7 +19,7 @@ private:
   char last;
 
   char peekChar() {
-    if (!hasLast) stream.get(last); 
+    if (!hasLast) last = stream.get(); 
     hasLast = true;
     return last;
   }
