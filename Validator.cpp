@@ -16,6 +16,10 @@ namespace Validator {
     return ret;
   }
 
+  bool _isEOF(char c) {
+    return c == std::char_traits<char>::eof();
+  }
+
   long long readInt(long long minValid = std::numeric_limits<long long>::min(), long long maxValid = std::numeric_limits<long long>::max()) {
     std::string token = "";
     while (isdigit(_peekChar()) || _peekChar() == '-') token.push_back(_getChar());
@@ -34,37 +38,51 @@ namespace Validator {
 
   std::string readString(const std::regex &rgx) {
     std::string ret = "";
-    while (!isspace(_peekChar())) ret.push_back(_getChar());
+    while (!isspace(_peekChar())) {
+      assert(!_isEOF(_peekChar())); 
+      ret.push_back(_getChar());
+    }
     assert(std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readString() {
     std::string ret = "";
-    while (!isspace(_peekChar())) ret.push_back(_getChar());
+    while (!isspace(_peekChar())) {
+      assert(!_isEOF(_peekChar())); 
+      ret.push_back(_getChar());
+    }
     return ret;
   }
 
   char readChar(const std::regex &rgx) {
+    assert(!_isEOF(_peekChar())); 
     char ret = _getChar();
     assert(std::regex_match(std::string(1, ret), rgx));
     return ret;
   }
 
   char readChar() {
+    assert(!_isEOF(_peekChar())); 
     return _getChar();
   }
 
   std::string readLine(const std::regex &rgx) {
     std::string ret = "";
-    while (_peekChar() != '\n') ret.push_back(_getChar());
+    while (_peekChar() != '\n') {
+      assert(!_isEOF(_peekChar())); 
+      ret.push_back(_getChar());
+    }
     assert(std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readLine() {
     std::string ret = "";
-    while (_peekChar() != '\n') ret.push_back(_getChar());
+    while (_peekChar() != '\n') {
+      assert(!_isEOF(_peekChar())); 
+      ret.push_back(_getChar());
+    }
     return ret;
   }
 
@@ -77,13 +95,14 @@ namespace Validator {
   }
 
   void readEOF() {
-    assert(_getChar() == std::char_traits<char>::eof());
+    assert(_isEOF(_getChar())); 
   }
 }
 
 using namespace Validator;
 
 int main() {
+  readString();
   readEOF();
   return 0;
 }
