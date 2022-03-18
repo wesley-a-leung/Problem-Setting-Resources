@@ -93,51 +93,37 @@ public:
 
   std::string readString(std::regex rgx) {
     std::string ret = "";
-    while (!isspace(peekChar())) {
-      require(!isEOF(peekChar())); 
-      ret.push_back(getChar());
-    }
+    while (!isspace(peekChar()) && !isEOF(peekChar())) ret.push_back(getChar());
     require(std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readString() {
     std::string ret = "";
-    while (!isspace(peekChar())) {
-      require(!isEOF(peekChar())); 
-      ret.push_back(getChar());
-    }
+    while (!isspace(peekChar()) && !isEOF(peekChar())) ret.push_back(getChar());
     return ret;
   }
 
   char readChar(std::regex rgx) {
-    require(!isEOF(peekChar())); 
     char ret = getChar();
     require(std::regex_match(std::string(1, ret), rgx));
     return ret;
   }
 
   char readChar() {
-    require(!isEOF(peekChar())); 
     return getChar();
   }
 
   std::string readLine(std::regex rgx) {
     std::string ret = "";
-    while (peekChar() != '\n') {
-      require(!isEOF(peekChar())); 
-      ret.push_back(getChar());
-    }
+    while (peekChar() != '\n' && !isEOF(peekChar())) ret.push_back(getChar());
     require(std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readLine() {
     std::string ret = "";
-    while (peekChar() != '\n') {
-      require(!isEOF(peekChar())); 
-      ret.push_back(getChar());
-    }
+    while (peekChar() != '\n' && !isEOF(peekChar())) ret.push_back(getChar());
     return ret;
   }
 

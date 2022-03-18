@@ -38,51 +38,37 @@ namespace Validator {
 
   std::string readString(const std::regex &rgx) {
     std::string ret = "";
-    while (!isspace(_peekChar())) {
-      assert(!_isEOF(_peekChar())); 
-      ret.push_back(_getChar());
-    }
+    while (!isspace(_peekChar()) && !_isEOF(_peekChar())) ret.push_back(_getChar());
     assert(std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readString() {
     std::string ret = "";
-    while (!isspace(_peekChar())) {
-      assert(!_isEOF(_peekChar())); 
-      ret.push_back(_getChar());
-    }
+    while (!isspace(_peekChar()) && !_isEOF(_peekChar())) ret.push_back(_getChar());
     return ret;
   }
 
   char readChar(const std::regex &rgx) {
-    assert(!_isEOF(_peekChar())); 
     char ret = _getChar();
     assert(std::regex_match(std::string(1, ret), rgx));
     return ret;
   }
 
   char readChar() {
-    assert(!_isEOF(_peekChar())); 
     return _getChar();
   }
 
   std::string readLine(const std::regex &rgx) {
     std::string ret = "";
-    while (_peekChar() != '\n') {
-      assert(!_isEOF(_peekChar())); 
-      ret.push_back(_getChar());
-    }
+    while (_peekChar() != '\n' && !_isEOF(_peekChar())) ret.push_back(_getChar());
     assert(std::regex_match(ret, rgx));
     return ret;
   }
 
   std::string readLine() {
     std::string ret = "";
-    while (_peekChar() != '\n') {
-      assert(!_isEOF(_peekChar())); 
-      ret.push_back(_getChar());
-    }
+    while (_peekChar() != '\n' && !_isEOF(_peekChar())) ret.push_back(_getChar());
     return ret;
   }
 
