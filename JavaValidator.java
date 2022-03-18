@@ -15,7 +15,7 @@ public class JavaValidator {
     public Validator(String fileName) throws IOException {
       din = new DataInputStream(new FileInputStream(fileName));
     }
-    private void ensure(boolean expr) throws IOException {
+    private void require(boolean expr) throws IOException {
       if (!expr) throw new IOException("Validator Error");
     }
     private byte readByte() throws IOException {
@@ -37,7 +37,7 @@ public class JavaValidator {
       StringBuilder token = new StringBuilder();
       while (Character.isDigit(peekChar()) || peekChar() == '-') token.append(getChar());
       int ret = Integer.parseInt(token.toString());
-      ensure(minValid <= ret && ret <= maxValid);
+      require(minValid <= ret && ret <= maxValid);
       return ret;
     }
     public int readInt() throws IOException {
@@ -47,7 +47,7 @@ public class JavaValidator {
       StringBuilder token = new StringBuilder();
       while (Character.isDigit(peekChar()) || peekChar() == '-') token.append(getChar());
       long ret = Long.parseLong(token.toString());
-      ensure(minValid <= ret && ret <= maxValid);
+      require(minValid <= ret && ret <= maxValid);
       return ret;
     }
     public long readLong() throws IOException {
@@ -57,7 +57,7 @@ public class JavaValidator {
       StringBuilder token = new StringBuilder();
       while (Character.isDigit(peekChar()) || peekChar() == '-' || peekChar() == '.') token.append(getChar());
       double ret = Double.parseDouble(token.toString());
-      ensure(minValid <= ret && ret <= maxValid);
+      require(minValid <= ret && ret <= maxValid);
       return ret;
     }
     public double readDouble() throws IOException {
@@ -66,7 +66,7 @@ public class JavaValidator {
     public String readString(String rgx) throws IOException {
       StringBuilder ret = new StringBuilder();
       while (!Character.isWhitespace(peekChar())) ret.append(getChar());
-      ensure(Pattern.matches(rgx, ret));
+      require(Pattern.matches(rgx, ret));
       return ret.toString();
     }
     public String readString() throws IOException {
@@ -74,7 +74,7 @@ public class JavaValidator {
     }
     public char readChar(String rgx) throws IOException {
       char ret = getChar();
-      ensure(Pattern.matches(rgx, "" + ret));
+      require(Pattern.matches(rgx, "" + ret));
       return ret;
     }
     public char readChar() throws IOException {
@@ -83,22 +83,22 @@ public class JavaValidator {
     public String readLine(String rgx) throws IOException {
       StringBuilder ret = new StringBuilder();
       while (peekChar() != '\n') ret.append(getChar());
-      ensure(Pattern.matches(rgx, ret));
+      require(Pattern.matches(rgx, ret));
       return ret.toString();
     }
     public String readLine() throws IOException {
       return readLine(anyLine);
     }
     public void readSpace() throws IOException {
-      ensure(getChar() == ' ');
+      require(getChar() == ' ');
     }
     public void readNewLine() throws IOException {
-      ensure(getChar() == '\n');
+      require(getChar() == '\n');
     }
     public void readEOF() throws IOException {
       try {
         getChar();
-        ensure(false);
+        require(false);
       } catch (EOFException e) {}
     }
     public void close() throws IOException {
