@@ -88,7 +88,6 @@ namespace Validator {
 using namespace Validator;
 
 int main() {
-  readString();
   readEOF();
   return 0;
 }
