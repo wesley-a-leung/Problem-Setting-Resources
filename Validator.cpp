@@ -1,6 +1,6 @@
 #include "Input.h"
 
-int main(int argc, char* argv[]) {
+int main() {
   std::ios::sync_with_stdio(0);
   std::cin.tie(0);
   Input::Validator in(std::cin);
