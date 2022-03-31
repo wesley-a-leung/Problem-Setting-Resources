@@ -54,7 +54,7 @@ namespace Input {
     char last;
 
     bool isWhitespace(char c) {
-      if (IDENTICAL_WHITESPACE) return c == ' ';
+      if (IDENTICAL_WHITESPACE) return c == ' ' || c == '\n';
       return isspace(c);
     }
 
@@ -173,7 +173,7 @@ namespace Input {
     }
 
     void readSpace() {
-      require(!IDENTICAL_WHITESPACE || isWhitespace(getChar()), WhitespaceError());
+      require(!IDENTICAL_WHITESPACE || getChar() == ' ', WhitespaceError());
     }
 
     void readNewLine() {
