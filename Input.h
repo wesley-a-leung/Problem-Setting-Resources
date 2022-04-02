@@ -173,7 +173,8 @@ namespace Input {
     }
 
     void readSpace() {
-      require(!IDENTICAL_WHITESPACE || getChar() == ' ', WhitespaceError());
+      require(isWhitespace(peekChar()) && !isNewLine(peekChar()), WhitespaceError());
+      getChar();
     }
 
     void readNewLine() {
