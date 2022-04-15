@@ -183,6 +183,12 @@ namespace Input {
       require((!IDENTICAL_WHITESPACE && isEOF(peekChar())) || isNewLine(getChar()), WhitespaceError());
     }
 
+    bool atEOF() {
+      skipToNextLine = true;
+      if (!IDENTICAL_WHITESPACE) skipWhitespace();
+      return isEOF(peekChar());
+    }
+
     void readEOF() {
       skipToNextLine = true;
       if (!IDENTICAL_WHITESPACE) skipWhitespace();
