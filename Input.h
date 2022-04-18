@@ -91,7 +91,7 @@ namespace Input {
 
     template <class ...Args> Reader(std::istream &stream, Args &&...args)
         : ErrorHandler(std::forward<Args>(args)...), stream(stream), hasLast(false), skipToNextLine(true) {}
-    
+
     template <class ...Args> Reader(const std::string &fileName, Args &&...args)
         : ErrorHandler(std::forward<Args>(args)...), streamPtr(std::make_unique<std::ifstream>(fileName)),
           stream(*streamPtr), hasLast(false), skipToNextLine(true) {}
