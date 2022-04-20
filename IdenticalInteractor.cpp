@@ -5,5 +5,5 @@ int main(int argc, char* argv[]) {
   Input::Validator judgeInput(argv[1]);
   Input::Validator judgeOutput(argv[2]);
   Input::IdenticalReader userOutput(std::cin);
-  return 0;
+  return ExitCode::AC;
 }
