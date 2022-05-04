@@ -26,9 +26,18 @@ public class JavaValidator {
     public void require(boolean expr, Throwable t) throws Throwable {
       if (!expr) throw t;
     }
+    private boolean isEOF(char c) {
+      return (byte) c == -1;
+    }
     private byte readByte() throws IOException {
       byte ret = 13;
-      while (ret == 13) ret = din.readByte();
+      while (ret == 13) {
+        try {
+          ret = din.readByte();
+        } catch (EOFException e) {
+          ret = -1;
+        }
+      }
       return ret;
     }
     private char peekChar() throws IOException {
@@ -90,13 +99,13 @@ public class JavaValidator {
     }
     public String readString(String rgx) throws Throwable {
       StringBuilder ret = new StringBuilder();
-      while (!Character.isWhitespace(peekChar())) ret.append(getChar());
+      while (!Character.isWhitespace(peekChar()) && !isEOF(peekChar())) ret.append(getChar());
       require(Pattern.matches(rgx, ret), new RegexError());
       return ret.toString();
     }
     public String readString() throws Throwable {
       StringBuilder ret = new StringBuilder();
-      while (!Character.isWhitespace(peekChar())) ret.append(getChar());
+      while (!Character.isWhitespace(peekChar()) && !isEOF(peekChar())) ret.append(getChar());
       return ret.toString();
     }
     public char readChar(String rgx) throws Throwable {
@@ -109,13 +118,13 @@ public class JavaValidator {
     }
     public String readLine(String rgx) throws Throwable {
       StringBuilder ret = new StringBuilder();
-      while (peekChar() != '\n') ret.append(getChar());
+      while (peekChar() != '\n' && !isEOF(peekChar())) ret.append(getChar());
       require(Pattern.matches(rgx, ret), new RegexError());
       return ret.toString();
     }
     public String readLine() throws Throwable {
       StringBuilder ret = new StringBuilder();
-      while (peekChar() != '\n') ret.append(getChar());
+      while (peekChar() != '\n' && !isEOF(peekChar())) ret.append(getChar());
       return ret.toString();
     }
     public void readSpace() throws Throwable {
@@ -124,19 +133,11 @@ public class JavaValidator {
     public void readNewLine() throws Throwable {
       require(getChar() == '\n', new WhitespaceError());
     }
-    public boolean atEOF() throws Throwable {
-      try {
-        peekChar();
-        return false;
-      } catch (EOFException e) {
-        return true;
-      }
+    public boolean atEOF() throws IOException {
+      return isEOF(peekChar());
     }
     public void readEOF() throws Throwable {
-      try {
-        getChar();
-        throw new WhitespaceError();
-      } catch (EOFException e) {}
+      require(isEOF(getChar()), new WhitespaceError());
     }
     public void close() throws Throwable {
       if (din == null) return;
