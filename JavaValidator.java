@@ -4,9 +4,17 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class JavaValidator {
+  public static class PresentationError extends Throwable {}
+  public static class IntegerParsingError extends PresentationError {}
+  public static class FloatingPointParsingError extends PresentationError {}
+  public static class WhitespaceError extends PresentationError {}
+  public static class RequirementFailure extends Throwable {}
+  public static class IntegerRangeError extends RequirementFailure {}
+  public static class FloatingPointRangeError extends RequirementFailure {}
+  public static class RegexError extends RequirementFailure {}
+
   public static class Validator {
     private DataInputStream din;
-    private String nonWhitespaceToken = "\\S+", nonWhitespaceChar = "\\S", anyLine = ".+";
     private boolean hasLast = false;
     private char last;
     public Validator(InputStream inputStream) {
@@ -15,8 +23,8 @@ public class JavaValidator {
     public Validator(String fileName) throws IOException {
       din = new DataInputStream(new FileInputStream(fileName));
     }
-    private void require(boolean expr) throws IOException {
-      if (!expr) throw new IOException("Validator Error");
+    public void require(boolean expr, Throwable t) throws Throwable {
+      if (!expr) throw t;
     }
     private byte readByte() throws IOException {
       byte ret = 13;
@@ -33,75 +41,104 @@ public class JavaValidator {
       hasLast = false;
       return ret;
     }
-    public int readInt(int minValid, int maxValid) throws IOException {
+    public int readInt(int minValid, int maxValid) throws Throwable {
       StringBuilder token = new StringBuilder();
       while (Character.isDigit(peekChar()) || peekChar() == '-') token.append(getChar());
-      int ret = Integer.parseInt(token.toString());
-      require(minValid <= ret && ret <= maxValid);
+      int ret = 0;
+      try {
+        ret = Integer.parseInt(token.toString());
+      } catch (NumberFormatException e) {
+        throw new IntegerParsingError();
+      }
+      require(minValid <= ret && ret <= maxValid, new IntegerRangeError());
       return ret;
     }
-    public int readInt() throws IOException {
+    public int readInt() throws Throwable {
       return readInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
-    public long readLong(long minValid, long maxValid) throws IOException {
+    public long readLong(long minValid, long maxValid) throws Throwable {
       StringBuilder token = new StringBuilder();
       while (Character.isDigit(peekChar()) || peekChar() == '-') token.append(getChar());
-      long ret = Long.parseLong(token.toString());
-      require(minValid <= ret && ret <= maxValid);
+      long ret = 0;
+      try {
+        ret = Long.parseLong(token.toString());
+      } catch (NumberFormatException e) {
+        throw new IntegerParsingError();
+      }
+      require(minValid <= ret && ret <= maxValid, new IntegerRangeError());
       return ret;
     }
-    public long readLong() throws IOException {
+    public long readLong() throws Throwable {
       return readLong(Long.MIN_VALUE, Long.MAX_VALUE);
     }
-    public double readDouble(double minValid, double maxValid) throws IOException {
+    public double readDouble(double minValid, double maxValid) throws Throwable {
       StringBuilder token = new StringBuilder();
       while (Character.isDigit(peekChar()) || peekChar() == '-' || peekChar() == '.') token.append(getChar());
-      double ret = Double.parseDouble(token.toString());
-      require(minValid <= ret && ret <= maxValid);
+      double ret = 0;
+      try {
+        ret = Double.parseDouble(token.toString());
+      } catch (NumberFormatException e) {
+        throw new FloatingPointParsingError();
+      } catch (NullPointerException e) {
+        throw new FloatingPointParsingError();
+      }
+      require(minValid <= ret && ret <= maxValid, new FloatingPointRangeError());
       return ret;
     }
-    public double readDouble() throws IOException {
+    public double readDouble() throws Throwable {
       return readDouble(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
-    public String readString(String rgx) throws IOException {
+    public String readString(String rgx) throws Throwable {
       StringBuilder ret = new StringBuilder();
       while (!Character.isWhitespace(peekChar())) ret.append(getChar());
-      require(Pattern.matches(rgx, ret));
+      require(Pattern.matches(rgx, ret), new RegexError());
       return ret.toString();
     }
-    public String readString() throws IOException {
-      return readString(nonWhitespaceToken);
+    public String readString() throws Throwable {
+      StringBuilder ret = new StringBuilder();
+      while (!Character.isWhitespace(peekChar())) ret.append(getChar());
+      return ret.toString();
     }
-    public char readChar(String rgx) throws IOException {
+    public char readChar(String rgx) throws Throwable {
       char ret = getChar();
-      require(Pattern.matches(rgx, "" + ret));
+      require(Pattern.matches(rgx, "" + ret), new RegexError());
       return ret;
     }
-    public char readChar() throws IOException {
-      return readChar(nonWhitespaceChar);
+    public char readChar() throws Throwable {
+      return getChar();
     }
-    public String readLine(String rgx) throws IOException {
+    public String readLine(String rgx) throws Throwable {
       StringBuilder ret = new StringBuilder();
       while (peekChar() != '\n') ret.append(getChar());
-      require(Pattern.matches(rgx, ret));
+      require(Pattern.matches(rgx, ret), new RegexError());
       return ret.toString();
     }
-    public String readLine() throws IOException {
-      return readLine(anyLine);
+    public String readLine() throws Throwable {
+      StringBuilder ret = new StringBuilder();
+      while (peekChar() != '\n') ret.append(getChar());
+      return ret.toString();
     }
-    public void readSpace() throws IOException {
-      require(getChar() == ' ');
+    public void readSpace() throws Throwable {
+      require(getChar() == ' ', new WhitespaceError());
     }
-    public void readNewLine() throws IOException {
-      require(getChar() == '\n');
+    public void readNewLine() throws Throwable {
+      require(getChar() == '\n', new WhitespaceError());
     }
-    public void readEOF() throws IOException {
+    public boolean atEOF() throws Throwable {
+      try {
+        peekChar();
+        return false;
+      } catch (EOFException e) {
+        return true;
+      }
+    }
+    public void readEOF() throws Throwable {
       try {
         getChar();
-        require(false);
+        throw new WhitespaceError();
       } catch (EOFException e) {}
     }
-    public void close() throws IOException {
+    public void close() throws Throwable {
       if (din == null) return;
       din.close();
     }
@@ -110,7 +147,7 @@ public class JavaValidator {
   private static Validator in = new Validator(System.in);
   private static PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws Throwable {
     in.readEOF();
     in.close();
     out.flush();
